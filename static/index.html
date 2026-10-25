@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambient Home Display</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&family=Plus+Jakarta+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="ambient-background" class="bg-gradient"></div>
+    <div id="ambient-lighting" class="bg-lighting"></div>
+
+    <main id="app-container" class="dashboard-viewport">
+        <!-- Top Header: Date and Live Clock -->
+        <header class="header-section">
+            <div class="clock-container">
+                <div id="clock-time" class="clock-time">12:00</div>
+                <div class="date-location-wrapper">
+                    <div id="clock-date" class="clock-date">Monday, 26 October</div>
+                    <div id="location-tag" class="location-tag">Ormond, Victoria</div>
+                </div>
+            </div>
+            <div id="status-pills" class="status-pills">
+                <div id="ac-status-badge" class="badge badge-ac">
+                    <span class="badge-dot"></span>
+                    <span id="ac-mode-text">AC: Cool (22°C)</span>
+                </div>
+                <div id="connection-badge" class="badge badge-conn">
+                    <span class="badge-dot dot-live"></span>
+                    <span id="conn-text">AirTouch Live</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Layout -->
+        <section class="content-grid">
+            <!-- Left Panel: AirTouch Room Temperatures -->
+            <div class="panel panel-rooms">
+                <div class="panel-header">
+                    <h2 class="panel-title">Climate Zones</h2>
+                    <span id="rooms-updated-time" class="update-label">Updated 1m ago</span>
+                </div>
+                <div id="rooms-container" class="rooms-grid">
+                    <!-- Dynamic room cards inserted here -->
+                </div>
+            </div>
+
+            <!-- Right Panel: Weather & Forecast -->
+            <div class="panel panel-weather">
+                <!-- Current Weather Summary -->
+                <div class="weather-current-card">
+                    <div class="weather-main-group">
+                        <div id="weather-icon" class="weather-icon-large">🌤️</div>
+                        <div class="temp-group">
+                            <span id="current-temp" class="temp-main">18.5°</span>
+                            <span id="feels-like" class="feels-like">Feels like 18°</span>
+                        </div>
+                    </div>
+                    <div class="weather-details-group">
+                        <div id="weather-desc" class="weather-condition">Partly Cloudy</div>
+                        <div class="weather-stats">
+                            <span>High <strong id="temp-high">21°</strong> / Low <strong id="temp-low">12°</strong></span>
+                            <span>Rain <strong id="precip-chance">10%</strong></span>
+                            <span>Wind <strong id="wind-speed">18 km/h</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hourly Forecast -->
+                <div class="forecast-section">
+                    <h3 class="section-subtitle">Hourly Outlook</h3>
+                    <div id="hourly-forecast" class="hourly-strip">
+                        <!-- Dynamic hourly forecast items -->
+                    </div>
+                </div>
+
+                <!-- 5-Day Forecast -->
+                <div class="forecast-section">
+                    <h3 class="section-subtitle">Upcoming Days</h3>
+                    <div id="daily-forecast" class="daily-list">
+                        <!-- Dynamic daily forecast items -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer: Sun timing & subtle status -->
+        <footer class="footer-bar">
+            <div class="sun-info">
+                <span>Sunrise <strong id="sun-rise">06:21</strong></span>
+                <span class="dot-divider">•</span>
+                <span>Sunset <strong id="sun-set">19:52</strong></span>
+            </div>
+            <div class="footer-note">
+                Ambient TV Dashboard
+            </div>
+        </footer>
+    </main>
+
+    <script src="static/js/app.js"></script>
+</body>
+</html>

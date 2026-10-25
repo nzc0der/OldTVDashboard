@@ -1,0 +1,16 @@
+[Unit]
+Description=Ambient Smart Home TV Dashboard Kiosk Browser
+After=ambient-dashboard.service graphical.target
+Wants=ambient-dashboard.service
+
+[Service]
+Type=simple
+User=pi
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+ExecStart=/home/pi/ambient-tv-dashboard/scripts/kiosk.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target
