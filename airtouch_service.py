@@ -123,15 +123,15 @@ class AirTouchService:
             })
 
         ac_units = []
-        main_mode = "Unknown"
+        main_mode = "Standby"
         for ac_num, ac in at.GetAcs().items():
             mode = str(getattr(ac, "AcMode", getattr(ac, "Mode", "Auto")))
             fan = str(getattr(ac, "FanSpeed", "Auto"))
             is_on = getattr(ac, "IsOn", False) or getattr(ac, "PowerState", False)
             if is_on:
-                main_mode = mode
+                main_mode = mode if mode != "Unknown" else "On"
             ac_units.append({
-                "id": ac_num,
+                "id": getattr(ac, "AcNumber", ac_num),
                 "name": getattr(ac, "AcName", f"AC {ac_num}"),
                 "is_on": is_on,
                 "mode": mode,
