@@ -1,4 +1,4 @@
-# Ambient Smart Home TV Dashboard
+w# Ambient Smart Home TV Dashboard
 
 A beautiful, always-on atmospheric display for a Raspberry Pi connected to a Panasonic TV. Designed to transform an unused television into a living piece of digital art displaying live climate zone temperatures, local weather for Ormond, Melbourne, and astronomical background themes.
 
@@ -46,7 +46,7 @@ A beautiful, always-on atmospheric display for a Raspberry Pi connected to a Pan
 
 ```bash
 cd /home/pi
-git clone git@github.com:nzc0der/OldTVDashboard.git ambient-tv-dashboard
+git clone https://github.com/nzc0der/OldTVDashboard.git ambient-tv-dashboard
 cd ambient-tv-dashboard
 
 # Install required packages
