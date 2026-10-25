@@ -24,7 +24,12 @@ A beautiful, always-on atmospheric display for a Raspberry Pi connected to a Pan
    - Layered CSS gradients and ambient glows calculated against actual Ormond sunrise/sunset using `suntime`.
    - Transitions smoothly across Pre-dawn, Sunrise, Morning, Daytime, Sunset, Twilight, and Night palettes.
 
-5. **Image Retention & Burn-in Precautions:**
+5. **Ambient Photo Slideshow:**
+   - Stream background family photos directly from Google Drive via `rclone`.
+   - 60-second randomized slideshow with Fisher-Yates shuffle and smooth crossfades.
+   - Gentle atmospheric dark gradient overlay to ensure clock and weather readouts remain crisp and readable.
+
+6. **Image Retention & Burn-in Precautions:**
    - Whole-layout pixel shifting (moves viewport 2–3px every 3 minutes).
    - Automatic evening visual dimming factor.
    - Predominantly dark aesthetic to protect older TV panels.
@@ -50,7 +55,7 @@ bash install.sh
 ```
 
 The script automatically:
-1. Installs all required system dependencies (`chromium`, `python3-pip`, `unclutter`, `curl`).
+1. Installs all required system dependencies (`chromium`, `python3-pip`, `unclutter`, `curl`, `rclone`).
 2. Installs required Python libraries (`flask`, `airtouch4pyapi`, `requests`, `suntime`, `tzdata`).
 3. Dynamically generates and installs `systemd` background services configured for your exact project location and user account.
 4. Enables and launches the dashboard backend and kiosk display automatically.
@@ -69,6 +74,33 @@ Then restart the service:
 sudo systemctl daemon-reload
 sudo systemctl restart ambient-dashboard.service
 ```
+
+---
+
+## Optional: Ambient Google Drive Photo Slideshow Setup
+
+To enable background photo slideshows from Google Drive:
+
+1. **Configure rclone for Google Drive:**
+   Run `rclone config` on your Raspberry Pi:
+   - Create a new remote named `gdriv`.
+   - Choose `drive` (Google Drive) as the storage type.
+   - Complete the authentication workflow.
+
+2. **Create the target folder:**
+   In your Google Drive account, create a folder named `PhotosForRaspi` and add your favorite wallpaper photos (`.jpg`, `.png`, `.webp`).
+
+3. **Verify rclone access:**
+   Test that `rclone` can list your photos by running:
+   ```bash
+   rclone ls gdriv:PhotosForRaspi
+   ```
+
+4. **Restart the dashboard service:**
+   ```bash
+   sudo systemctl restart ambient-dashboard.service
+   ```
+   The dashboard backend automatically detects photos in `gdriv:PhotosForRaspi` and rotates them gently every 60 seconds behind the weather and climate overlays. If `rclone` is not configured or no photos are found, the dashboard gracefully falls back to the pure dynamic color gradients.
 
 ---
 

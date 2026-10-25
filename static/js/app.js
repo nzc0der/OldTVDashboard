@@ -63,15 +63,22 @@ const PALETTES = {
 
 class DashboardApp {
     constructor() {
-        self = this;
         this.sunTimes = { sunrise_hour: 6.5, sunset_hour: 20.0 };
         this.shiftX = 0;
         this.shiftY = 0;
         this.lastAirTouchData = null;
         this.lastWeatherData = null;
 
+        // Slideshow properties
+        this.photosList = [];
+        this.currentPhotoIndex = 0;
+        this.activeSlideLayer = 'a';
+        this.slideshowTimer = null;
+        this.slideshowInterval = 60000; // 60 seconds
+
         this.initClock();
         this.initPixelShift();
+        this.initSlideshow();
         this.fetchData();
 
         // Refresh data every 30 seconds
@@ -169,7 +176,81 @@ class DashboardApp {
     }
 
     /* -------------------------------------------------------------
-     * 3. Fetch Data from Backend API
+     * 3. Ambient Slideshow System
+     * ------------------------------------------------------------- */
+    async initSlideshow() {
+        await this.fetchPhotosList();
+        // Check for newly added or removed photos every 10 minutes
+        setInterval(() => this.fetchPhotosList(), 600000);
+    }
+
+    async fetchPhotosList() {
+        try {
+            const resp = await fetch('/api/photos');
+            if (!resp.ok) return;
+            const data = await resp.json();
+
+            if (data.available && data.photos && data.photos.length > 0) {
+                // Fisher-Yates shuffle for randomized slideshow order
+                const shuffled = [...data.photos];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                this.photosList = shuffled;
+                document.getElementById('ambient-background').classList.add('has-slideshow');
+
+                if (!this.slideshowTimer) {
+                    this.showNextPhoto();
+                    this.slideshowTimer = setInterval(() => this.showNextPhoto(), this.slideshowInterval);
+                }
+            } else {
+                // Fall back smoothly to gradient artwork if no photos available
+                document.getElementById('ambient-background').classList.remove('has-slideshow');
+                if (this.slideshowTimer) {
+                    clearInterval(this.slideshowTimer);
+                    this.slideshowTimer = null;
+                }
+            }
+        } catch (e) {
+            console.warn('Failed to fetch photos list:', e);
+            document.getElementById('ambient-background').classList.remove('has-slideshow');
+        }
+    }
+
+    showNextPhoto() {
+        if (!this.photosList || this.photosList.length === 0) return;
+
+        const filename = this.photosList[this.currentPhotoIndex];
+        this.currentPhotoIndex = (this.currentPhotoIndex + 1) % this.photosList.length;
+
+        const photoUrl = `/api/photos/${encodeURIComponent(filename)}`;
+
+        // Preload image before showing to ensure smooth crossfade
+        const img = new Image();
+        img.onload = () => {
+            const nextLayerId = this.activeSlideLayer === 'a' ? 'slideshow-layer-b' : 'slideshow-layer-a';
+            const currLayerId = this.activeSlideLayer === 'a' ? 'slideshow-layer-a' : 'slideshow-layer-b';
+
+            const nextLayer = document.getElementById(nextLayerId);
+            const currLayer = document.getElementById(currLayerId);
+
+            nextLayer.style.backgroundImage = `url("${photoUrl}")`;
+            nextLayer.classList.add('active');
+            currLayer.classList.remove('active');
+
+            this.activeSlideLayer = this.activeSlideLayer === 'a' ? 'b' : 'a';
+        };
+        img.onerror = () => {
+            console.warn(`Failed to load background photo: ${filename}`);
+            // Retry next photo on failure
+            setTimeout(() => this.showNextPhoto(), 3000);
+        };
+        img.src = photoUrl;
+    }
+
+    /* -------------------------------------------------------------
+     * 4. Fetch Data from Backend API
      * ------------------------------------------------------------- */
     async fetchData() {
         try {

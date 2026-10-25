@@ -30,7 +30,7 @@ chmod +x "${PROJECT_DIR}/install.sh"
 # 2. Install required system packages
 echo -e "\n${BLUE}[2/5] Installing system dependencies (apt)...${NC}"
 sudo apt update
-sudo apt install -y python3-pip unclutter curl
+sudo apt install -y python3-pip unclutter curl rclone
 
 # Check for chromium browser binary
 if apt-cache show chromium-browser >/dev/null 2>&1; then

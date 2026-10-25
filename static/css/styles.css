@@ -43,6 +43,46 @@ html, body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Background Photos Slideshow Container */
+.bg-slideshow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    overflow: hidden;
+    background-color: #050814;
+}
+
+.slide-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 2.5s ease-in-out;
+}
+
+.slide-layer.active {
+    opacity: 1;
+}
+
+/* Translucent dark vignette overlay to preserve UI text legibility */
+.slideshow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(5, 8, 20, 0.45) 0%, rgba(5, 8, 20, 0.75) 100%);
+    z-index: 2;
+}
+
 /* Layered Dynamic Evolving Background */
 .bg-gradient {
     position: fixed;
@@ -50,10 +90,16 @@ html, body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1;
+    z-index: 3;
     background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid) 50%, var(--bg-gradient-end));
-    transition: background 3s ease, filter 2s ease;
+    transition: background 3s ease, filter 2s ease, opacity 2s ease;
     filter: brightness(var(--dim-factor));
+    opacity: 1;
+}
+
+/* When slideshow is active, reduce gradient opacity to let photo show softly through */
+.bg-gradient.has-slideshow {
+    opacity: 0.35;
 }
 
 .bg-lighting {
@@ -62,7 +108,7 @@ html, body {
     left: -20vw;
     width: 140vw;
     height: 140vh;
-    z-index: 2;
+    z-index: 4;
     background: radial-gradient(circle at 50% 30%, var(--bg-accent-glow), transparent 70%);
     pointer-events: none;
     transition: background 3s ease;
