@@ -29,27 +29,24 @@
                 </div>
             </div>
             <div id="status-pills" class="status-pills">
-                <div id="ac-status-badge" class="badge badge-ac">
-                    <span class="badge-dot"></span>
-                    <span id="ac-mode-text">AC: Cool (22°C)</span>
-                </div>
                 <div id="connection-badge" class="badge badge-conn">
                     <span class="badge-dot dot-live"></span>
-                    <span id="conn-text">AirTouch Live</span>
+                    <span id="conn-text">Drive Photos Live</span>
                 </div>
             </div>
         </header>
 
         <!-- Main Content Layout -->
         <section class="content-grid">
-            <!-- Left Panel: AirTouch Room Temperatures -->
-            <div class="panel panel-rooms">
+            <!-- Left Panel: Photo Gallery Showcase -->
+            <div class="panel panel-photos">
                 <div class="panel-header">
-                    <h2 class="panel-title">Climate Zones</h2>
-                    <span id="rooms-updated-time" class="update-label">Updated 1m ago</span>
+                    <h2 class="panel-title">Photo Gallery</h2>
+                    <span id="photo-counter-text" class="update-label">Photo 1 of 1</span>
                 </div>
-                <div id="rooms-container" class="rooms-grid">
-                    <!-- Dynamic room cards inserted here -->
+                <div class="featured-photo-frame">
+                    <img id="featured-photo-img" class="featured-photo-img" src="" alt="Featured Photo">
+                    <div id="featured-photo-caption" class="featured-photo-caption">Loading photos...</div>
                 </div>
             </div>
 

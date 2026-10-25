@@ -240,6 +240,15 @@ class DashboardApp {
             currLayer.classList.remove('active');
 
             this.activeSlideLayer = this.activeSlideLayer === 'a' ? 'b' : 'a';
+
+            // Update featured photo showcase frame & counter
+            const featuredImg = document.getElementById('featured-photo-img');
+            const featuredCaption = document.getElementById('featured-photo-caption');
+            const photoCounter = document.getElementById('photo-counter-text');
+
+            if (featuredImg) featuredImg.src = photoUrl;
+            if (featuredCaption) featuredCaption.textContent = filename;
+            if (photoCounter) photoCounter.textContent = `Photo ${this.currentPhotoIndex} of ${this.photosList.length}`;
         };
         img.onerror = () => {
             console.warn(`Failed to load background photo: ${filename}`);
@@ -264,9 +273,6 @@ class DashboardApp {
                 document.getElementById('sun-set').textContent = data.sun.sunset || '20:00';
             }
 
-            if (data.airtouch) {
-                this.renderAirTouch(data.airtouch);
-            }
 
             if (data.weather) {
                 this.renderWeather(data.weather);
@@ -277,59 +283,6 @@ class DashboardApp {
         }
     }
 
-    /* -------------------------------------------------------------
-     * 4. Render AirTouch Room Temperatures & Status
-     * ------------------------------------------------------------- */
-    renderAirTouch(airtouch) {
-        this.lastAirTouchData = airtouch;
-
-        const connBadge = document.getElementById('connection-badge');
-        const connText = document.getElementById('conn-text');
-
-        if (airtouch.connected) {
-            connBadge.innerHTML = '<span class="badge-dot dot-live"></span><span id="conn-text">AirTouch Live</span>';
-        } else {
-            connBadge.innerHTML = '<span class="badge-dot dot-stale"></span><span id="conn-text">AirTouch Stale</span>';
-        }
-
-        const acModeText = document.getElementById('ac-mode-text');
-        acModeText.textContent = `AC: ${airtouch.mode || 'Standby'}`;
-
-        const roomsContainer = document.getElementById('rooms-container');
-        roomsContainer.innerHTML = '';
-
-        const rooms = airtouch.rooms || [];
-        rooms.forEach(room => {
-            const card = document.createElement('div');
-            card.className = `room-card ${room.is_on ? 'active-zone' : ''}`;
-
-            const measuredDisplay = room.has_sensor && room.temperature !== null
-                ? `${room.temperature}°C`
-                : '--°C';
-
-            const targetDisplay = room.target_temperature
-                ? `Set ${room.target_temperature}°C`
-                : (room.open_percent !== undefined ? `Open ${room.open_percent}%` : '');
-
-            const statusText = room.is_on ? 'Active' : 'Off';
-
-            card.innerHTML = `
-                <div class="room-card-header">
-                    <span class="room-name">${room.name}</span>
-                    <span class="room-status-indicator">${statusText}</span>
-                </div>
-                <div class="room-temp-wrapper">
-                    <span class="room-temp-measured">${measuredDisplay}</span>
-                    <span class="room-temp-target">${targetDisplay}</span>
-                </div>
-            `;
-            roomsContainer.appendChild(card);
-        });
-
-        document.getElementById('rooms-updated-time').textContent = airtouch.last_updated
-            ? `Updated ${new Date(airtouch.last_updated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
-            : 'Updated recently';
-    }
 
     /* -------------------------------------------------------------
      * 5. Render Weather & Forecast Data
