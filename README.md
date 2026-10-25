@@ -1,4 +1,4 @@
-w# Ambient Smart Home TV Dashboard
+# Ambient Smart Home TV Dashboard
 
 A beautiful, always-on atmospheric display for a Raspberry Pi connected to a Panasonic TV. Designed to transform an unused television into a living piece of digital art displaying live climate zone temperatures, local weather for Ormond, Melbourne, and astronomical background themes.
 
@@ -46,7 +46,7 @@ A beautiful, always-on atmospheric display for a Raspberry Pi connected to a Pan
 
 ```bash
 cd /home/pi
-git clone https://github.com/nzc0der/OldTVDashboard.git ambient-tv-dashboard
+git clone <your-repo-url> ambient-tv-dashboard
 cd ambient-tv-dashboard
 
 # Install required packages
@@ -67,7 +67,12 @@ export AIRTOUCH_IP=192.168.1.100
 
 ### 3. Set Up systemd Services
 
+Ensure you are inside the project repository directory before running these commands:
+
 ```bash
+# Navigate to the project directory first
+cd /home/pi/ambient-tv-dashboard
+
 # Copy systemd service files
 sudo cp systemd/ambient-dashboard.service /etc/systemd/system/
 sudo cp systemd/ambient-kiosk.service /etc/systemd/system/
