@@ -40,54 +40,34 @@ A beautiful, always-on atmospheric display for a Raspberry Pi connected to a Pan
 
 ---
 
-## Installation Guide for Raspberry Pi OS
+## Easy 1-Step Installation for Raspberry Pi OS
 
-### 1. Clone & Install Dependencies
+Run the automated installer script from inside the project folder:
 
 ```bash
-cd /home/pi
-git clone <your-repo-url> ambient-tv-dashboard
 cd ambient-tv-dashboard
-
-# Install required packages
-sudo apt update
-sudo apt install -y python3-pip chromium-browser unclutter
-
-# Install Python requirements
-pip3 install flask airtouch4pyapi requests suntime tzdata
+bash install.sh
 ```
 
-### 2. Configure AirTouch IP
+The script automatically:
+1. Installs all required system dependencies (`chromium`, `python3-pip`, `unclutter`, `curl`).
+2. Installs required Python libraries (`flask`, `airtouch4pyapi`, `requests`, `suntime`, `tzdata`).
+3. Dynamically generates and installs `systemd` background services configured for your exact project location and user account.
+4. Enables and launches the dashboard backend and kiosk display automatically.
 
-Set your AirTouch 5 unit's IP address in `systemd/ambient-dashboard.service` or export it as an environment variable:
+---
 
-```bash
-export AIRTOUCH_IP=192.168.1.100
+## Optional: Configure AirTouch 5 IP
+
+If your AirTouch 5 system is on a specific static IP address, you can set it in `/etc/systemd/system/ambient-dashboard.service`:
+
+```ini
+Environment=AIRTOUCH_IP=192.168.1.100
 ```
-
-### 3. Set Up systemd Services
-
-Ensure you are inside the project repository directory before running these commands:
-
+Then restart the service:
 ```bash
-# Navigate to the project directory first
-cd /home/pi/ambient-tv-dashboard
-
-# Copy systemd service files
-sudo cp systemd/ambient-dashboard.service /etc/systemd/system/
-sudo cp systemd/ambient-kiosk.service /etc/systemd/system/
-
-# Make kiosk script executable
-chmod +x scripts/kiosk.sh
-
-# Reload systemd daemon and enable services
 sudo systemctl daemon-reload
-sudo systemctl enable ambient-dashboard.service
-sudo systemctl enable ambient-kiosk.service
-
-# Start the dashboard backend and kiosk browser
-sudo systemctl start ambient-dashboard.service
-sudo systemctl start ambient-kiosk.service
+sudo systemctl restart ambient-dashboard.service
 ```
 
 ---
