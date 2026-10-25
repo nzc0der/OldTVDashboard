@@ -221,38 +221,24 @@ class DashboardApp {
     showNextPhoto() {
         if (!this.photosList || this.photosList.length === 0) return;
 
-        const filename = this.photosList[this.currentPhotoIndex];
+        const photoIndex = this.currentPhotoIndex;
+        const filename = this.photosList[photoIndex];
         this.currentPhotoIndex = (this.currentPhotoIndex + 1) % this.photosList.length;
 
         const photoUrl = `/api/photos/${encodeURIComponent(filename)}`;
 
-        // Preload image before showing to ensure smooth crossfade
         const img = new Image();
         img.onload = () => {
-            const nextLayerId = this.activeSlideLayer === 'a' ? 'slideshow-layer-b' : 'slideshow-layer-a';
-            const currLayerId = this.activeSlideLayer === 'a' ? 'slideshow-layer-a' : 'slideshow-layer-b';
-
-            const nextLayer = document.getElementById(nextLayerId);
-            const currLayer = document.getElementById(currLayerId);
-
-            nextLayer.style.backgroundImage = `url("${photoUrl}")`;
-            nextLayer.classList.add('active');
-            currLayer.classList.remove('active');
-
-            this.activeSlideLayer = this.activeSlideLayer === 'a' ? 'b' : 'a';
-
-            // Update featured photo showcase frame & counter
             const featuredImg = document.getElementById('featured-photo-img');
             const featuredCaption = document.getElementById('featured-photo-caption');
             const photoCounter = document.getElementById('photo-counter-text');
 
             if (featuredImg) featuredImg.src = photoUrl;
             if (featuredCaption) featuredCaption.textContent = filename;
-            if (photoCounter) photoCounter.textContent = `Photo ${this.currentPhotoIndex} of ${this.photosList.length}`;
+            if (photoCounter) photoCounter.textContent = `Photo ${photoIndex + 1} of ${this.photosList.length}`;
         };
         img.onerror = () => {
-            console.warn(`Failed to load background photo: ${filename}`);
-            // Retry next photo on failure
+            console.warn(`Failed to load photo: ${filename}`);
             setTimeout(() => this.showNextPhoto(), 3000);
         };
         img.src = photoUrl;
