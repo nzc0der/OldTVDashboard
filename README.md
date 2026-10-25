@@ -46,7 +46,7 @@ A beautiful, always-on atmospheric display for a Raspberry Pi connected to a Pan
 
 ```bash
 cd /home/pi
-git clone <your-repo-url> ambient-tv-dashboard
+git clone git@github.com:nzc0der/OldTVDashboard.git ambient-tv-dashboard
 cd ambient-tv-dashboard
 
 # Install required packages
