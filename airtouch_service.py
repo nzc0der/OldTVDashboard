@@ -1,4 +1,4 @@
-```python
+python
 import asyncio
 import logging
 import math
@@ -240,4 +240,3 @@ class AirTouchService:
             loop.close()
 
         return self.cached_data
-```
